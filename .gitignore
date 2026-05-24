@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Virtual environment
+venv/
+.venv/
+my_django_env/
+env/
+
+# Environment variables 
+.env
+
+# Django
+*.log
+db.sqlite3
+media/
+
+# VS Code
+.vscode/
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+
+# Render
+staticfiles/
