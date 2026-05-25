@@ -5,6 +5,7 @@ app_name = 'community'
 
 urlpatterns = [
     path('questions/', views.question_board, name='question_board'),
+    path('note/<int:note_pk>/ask/', views.ask_question, name='ask_question'),
     path('question/<int:pk>/answer/', views.add_answer, name='add_answer'),
     path('answer/<int:pk>/upvote/', views.upvote_answer, name='upvote_answer'),
     path('answer/<int:pk>/accept/', views.accept_answer, name='accept_answer'),

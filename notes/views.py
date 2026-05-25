@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.utils.safestring import mark_safe
+import markdown as md
 from .models import Level, Chapter, Note
 
 
@@ -30,32 +32,33 @@ def note_detail(request, slug):
     note = get_object_or_404(Note, slug=slug, is_published=True)
     questions = note.questions.all()
 
-    # Logged in — full access
+    # Convert markdown to HTML
+    content_html = mark_safe(md.markdown(
+        note.content,
+        extensions=['extra', 'codehilite', 'toc']
+    ))
+
     if request.user.is_authenticated:
         return render(request, 'notes/note_detail.html', {
             'note': note,
+            'content_html': content_html,
             'questions': questions,
             'is_blocked': False
         })
 
-    # Not logged in — check session
     viewed_note = request.session.get('free_note_slug')
 
     if viewed_note is None:
-        # First note — allow and save to session
         request.session['free_note_slug'] = slug
         is_blocked = False
-
     elif viewed_note == slug:
-        # Same note — allow again
         is_blocked = False
-
     else:
-        # Second note — block
         is_blocked = True
 
     return render(request, 'notes/note_detail.html', {
         'note': note,
+        'content_html': content_html,
         'questions': questions,
         'is_blocked': is_blocked
     })

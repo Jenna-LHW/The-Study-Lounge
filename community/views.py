@@ -50,3 +50,17 @@ def accept_answer(request, pk):
         answer.question.save()
         messages.success(request, 'Answer marked as accepted.')
     return redirect('notes:note_detail', slug=answer.question.note.slug)
+
+@login_required
+def ask_question(request, note_pk):
+    note = get_object_or_404(Note, pk=note_pk)
+    if request.method == 'POST':
+        body = request.POST.get('body', '').strip()
+        if body:
+            Question.objects.create(
+                note=note,
+                user=request.user,
+                body=body
+            )
+            messages.success(request, 'Your question was posted successfully.')
+    return redirect('notes:note_detail', slug=note.slug)
