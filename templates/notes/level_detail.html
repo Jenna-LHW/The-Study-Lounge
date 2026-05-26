@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ level }} — The Study Lounge{% endblock %}
+
+{% block content %}
+<div style="max-width:1100px; margin:0 auto; padding:48px 24px;">
+
+    <!-- Header -->
+    <div class="breadcrumb" style="margin-bottom:8px;">
+        <a href="/">Home</a>
+        <span>›</span>
+        <span style="color:var(--text-dark);">{{ level }}</span>
+    </div>
+
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-bottom:48px;">
+        <div>
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+                <span style="display:inline-flex; align-items:center; justify-content:center; width:52px; height:52px; border-radius:12px; background:var(--offwhite);">
+                    {% if level.name == 'SC' %}
+                        <i data-lucide="backpack" style="width:28px; height:28px; stroke-width:1.5; color:var(--oxford);"></i>
+                    {% elif level.name == 'HSC' %}
+                        <i data-lucide="graduation-cap" style="width:28px; height:28px; stroke-width:1.5; color:var(--oxford);"></i>
+                    {% else %}
+                        <i data-lucide="laptop" style="width:28px; height:28px; stroke-width:1.5; color:var(--oxford);"></i>
+                    {% endif %}
+                </span>
+                <h1 style="font-size:2.2rem; font-weight:800; color:var(--oxford); margin:0;">{{ level }}</h1>
+            </div>
+            {% if level.description %}
+                <p style="color:var(--text-mid); font-size:16px; margin:0; max-width:520px;">{{ level.description }}</p>
+            {% endif %}
+        </div>
+        <span class="badge badge-oxford" style="font-size:13px; padding:6px 14px;">{{ chapters.count }} {% if level.name == 'BSC' %}modules{% else %}chapters{% endif %}</span>
+    </div>
+
+    <!-- Chapters/Modules grid -->
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr)); gap:20px;">
+        {% for chapter in chapters %}
+            <a href="{% url 'notes:chapter_detail' chapter.slug %}" class="card" style="padding:24px; text-decoration:none; display:block;">
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+                    <div style="background:var(--oxford); color:var(--amber); font-family:'JetBrains Mono',monospace; font-weight:700; font-size:12px; width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                        {% if level.name == 'BSC' %}M{{ chapter.order }}{% else %}C{{ chapter.order }}{% endif %}
+                    </div>
+                    <span style="font-size:11px; font-weight:600; color:var(--text-light); text-transform:uppercase; letter-spacing:0.05em;">
+                        {% if level.name == 'BSC' %}Module{% else %}Chapter {{ chapter.order }}{% endif %}
+                    </span>
+                </div>
+                <h3 style="font-size:1.05rem; font-weight:700; color:var(--oxford); margin:0 0 8px; line-height:1.4;">{{ chapter.name }}</h3>
+                {% if chapter.description %}
+                    <p style="font-size:13px; color:var(--text-mid); margin:0 0 14px; line-height:1.5;">{{ chapter.description }}</p>
+                {% endif %}
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-top:14px; padding-top:14px; border-top:1px solid var(--offwhite);">
+                    <span style="font-size:12px; color:var(--text-light);">{{ chapter.notes.count }} notes</span>
+                    <span style="color:var(--azure); font-size:18px; font-weight:700;">→</span>
+                </div>
+            </a>
+        {% empty %}
+            <div style="grid-column:span 3; text-align:center; padding:60px 0; color:var(--text-light);">
+                <div style="display:flex; justify-content:center; margin-bottom:12px;">
+                    <i data-lucide="mail-open" style="width:48px; height:48px; stroke-width:1.2; color:var(--text-light);"></i>
+                </div>
+                <p style="font-size:16px;">No {% if level.name == 'BSC' %}modules{% else %}chapters{% endif %} added yet — check back soon!</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

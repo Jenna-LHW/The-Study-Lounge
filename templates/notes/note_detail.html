@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ note.title }} — The Study Lounge{% endblock %}
+
+{% block content %}
+<div style="max-width:860px; margin:0 auto; padding:48px 24px;">
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb" style="margin-bottom:8px;">
+        <a href="/">Home</a>
+        <span>›</span>
+        <a href="{% url 'notes:level_detail' note.chapter.level.slug %}">{{ note.chapter.level }}</a>
+        <span>›</span>
+        <a href="{% url 'notes:chapter_detail' note.chapter.slug %}">{{ note.chapter.name }}</a>
+        <span>›</span>
+        <span style="color:var(--text-dark);">{{ note.title }}</span>
+    </div>
+
+    <!-- Note header -->
+    <div style="margin:20px 0 32px;">
+        <h1 style="font-size:2.2rem; font-weight:800; color:var(--oxford); margin:0 0 12px; line-height:1.2;">{{ note.title }}</h1>
+        {% if note.summary %}
+            <p style="font-size:17px; color:var(--text-mid); margin:0 0 14px; line-height:1.7;">{{ note.summary }}</p>
+        {% endif %}
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <span class="badge badge-oxford">{{ note.chapter.level }}</span>
+            <span class="badge badge-azure">{{ note.chapter.name }}</span>
+            <span style="font-size:12px; color:var(--text-light);">Last updated {{ note.updated_at|date:"d M Y" }}</span>
+        </div>
+    </div>
+
+    {% if is_blocked %}
+        <!-- Blurred gate -->
+        <div style="position:relative; margin-bottom:40px;">
+            <div class="blurred-content prose" style="background:var(--white); border-radius:16px; padding:32px; border:1.5px solid #e8ecf4;">
+                {{ content_html }}
+            </div>
+            <!-- Gradient fade -->
+            <div style="position:absolute; bottom:0; left:0; right:0; height:120px; background:linear-gradient(to bottom, transparent, var(--offwhite)); border-radius:0 0 16px 16px;"></div>
+            <!-- Signup card -->
+            <div style="position:absolute; bottom:-40px; left:50%; transform:translateX(-50%); width:100%; max-width:440px; padding:0 16px;">
+                <div style="background:var(--white); border:2px solid var(--oxford); border-radius:20px; padding:36px 32px; text-align:center; box-shadow:0 16px 48px rgba(0,45,98,0.15);">
+                    <div style="width:56px; height:56px; background:var(--oxford); border-radius:16px; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; font-size:24px;"><i data-lucide="lock" style="width:28px; height:28px; stroke-width:1.5; color:white;"></i></div>
+                    <h3 style="font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:800; color:var(--oxford); margin:0 0 10px;">Sign up to keep reading</h3>
+                    <p style="font-size:14px; color:var(--text-mid); margin:0 0 24px; line-height:1.6;">Create a free account to access all CS notes for SC, HSC and BSc Computer Science.</p>
+                    <a href="/register/" class="btn-primary" style="display:block; text-align:center; margin-bottom:12px; padding:12px;">Create free account</a>
+                    <a href="/login/" style="font-size:14px; color:var(--azure); text-decoration:none;">Already have an account? <strong>Log in</strong></a>
+                </div>
+            </div>
+        </div>
+        <div style="height:120px;"></div>
+
+    {% else %}
+        <!-- Full note content -->
+        <div class="prose" style="background:var(--white); border-radius:16px; padding:40px; border:1.5px solid #e8ecf4; margin-bottom:56px;">
+            {{ content_html }}
+        </div>
+
+        <!-- Q&A Section -->
+        <div>
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:28px;">
+                <h2 style="font-size:1.6rem; font-weight:800; color:var(--oxford); margin:0;">Questions & Answers</h2>
+                <span class="badge badge-oxford">{{ questions.count }}</span>
+            </div>
+
+            <!-- Ask question form -->
+            {% if user.is_authenticated %}
+                <form method="POST" action="{% url 'community:ask_question' note.pk %}" style="background:var(--white); border:1.5px solid #e8ecf4; border-radius:16px; padding:24px; margin-bottom:32px;">
+                    {% csrf_token %}
+                    <label style="font-family:'Syne',sans-serif; font-size:14px; font-weight:700; color:var(--oxford); display:block; margin-bottom:10px;">Ask a question about this note</label>
+                    <textarea name="body" rows="3" placeholder="What would you like to know?" style="width:100%; border:1.5px solid #e8ecf4; border-radius:12px; padding:12px 14px; font-size:14px; font-family:'DM Sans',sans-serif; color:var(--text-dark); resize:none; outline:none; transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--azure)'" onblur="this.style.borderColor='#e8ecf4'"></textarea>
+                    <button type="submit" class="btn-primary" style="margin-top:12px; border:none; cursor:pointer; font-size:14px; padding:10px 22px;">Post question</button>
+                </form>
+            {% else %}
+                <div style="background:var(--offwhite); border:1.5px solid #e8ecf4; border-radius:16px; padding:20px; text-align:center; margin-bottom:32px;">
+                    <p style="font-size:14px; color:var(--text-mid); margin:0;">
+                        <a href="/login/" style="color:var(--azure); font-weight:600; text-decoration:none;">Log in</a> or
+                        <a href="/register/" style="color:var(--azure); font-weight:600; text-decoration:none;">sign up</a> to ask a question.
+                    </p>
+                </div>
+            {% endif %}
+
+            <!-- Questions list -->
+            {% for question in questions %}
+                <div style="background:var(--white); border:1.5px solid #e8ecf4; border-radius:16px; padding:24px; margin-bottom:20px;">
+                    <!-- Question header -->
+                    <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+                        <div style="width:34px; height:34px; background:var(--oxford); border-radius:10px; display:flex; align-items:center; justify-content:center; color:white; font-family:'Syne',sans-serif; font-weight:700; font-size:13px; flex-shrink:0;">
+                            {{ question.user.username|first|upper }}
+                        </div>
+                        <div>
+                            <span style="font-weight:600; font-size:14px; color:var(--text-dark);">{{ question.user.username }}</span>
+                            <span style="font-size:12px; color:var(--text-light); margin-left:8px;">{{ question.created_at|date:"d M Y" }}</span>
+                        </div>
+                        {% if question.is_answered %}
+                            <span class="badge badge-green" style="margin-left:auto;">✓ Answered</span>
+                        {% endif %}
+                    </div>
+                    <p style="font-size:15px; color:var(--text-dark); margin:0 0 16px; line-height:1.65;">{{ question.body }}</p>
+
+                    <!-- Answers -->
+                    {% for answer in question.answers.all %}
+                        <div style="margin-left:20px; border-left:3px solid {% if answer.is_accepted %}var(--sage){% else %}#e8ecf4{% endif %}; padding-left:16px; margin-bottom:14px;">
+                            <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                                <div style="width:28px; height:28px; background:{% if answer.is_accepted %}var(--sage){% else %}var(--offwhite){% endif %}; border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--oxford); font-family:'Syne',sans-serif; font-weight:700; font-size:11px; flex-shrink:0;">
+                                    {{ answer.user.username|first|upper }}
+                                </div>
+                                <span style="font-weight:600; font-size:13px; color:var(--text-dark);">{{ answer.user.username }}</span>
+                                {% if answer.is_accepted %}
+                                    <span class="badge badge-green">✓ Accepted answer</span>
+                                {% endif %}
+                            </div>
+                            <p style="font-size:14px; color:var(--text-dark); margin:0 0 10px; line-height:1.65;">{{ answer.body }}</p>
+                            <div style="display:flex; align-items:center; gap:16px;">
+                                <form method="POST" action="{% url 'community:upvote_answer' answer.pk %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" style="background:none; border:none; cursor:pointer; font-size:13px; color:var(--text-light); display:flex; align-items:center; gap:4px; padding:0;">
+                                        <span>▲</span> <span style="font-weight:600;">{{ answer.upvotes }}</span>
+                                    </button>
+                                </form>
+                                {% if user.is_staff and not answer.is_accepted %}
+                                    <form method="POST" action="{% url 'community:accept_answer' answer.pk %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" style="background:none; border:none; cursor:pointer; font-size:13px; color:var(--sage); font-weight:600; padding:0;">✓ Accept answer</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p style="font-size:13px; color:var(--text-light); margin-left:20px;">No answers yet.</p>
+                    {% endfor %}
+
+                    <!-- Answer form -->
+                    {% if user.is_authenticated %}
+                        <form method="POST" action="{% url 'community:add_answer' question.pk %}" style="margin-top:14px; margin-left:20px;">
+                            {% csrf_token %}
+                            <textarea name="body" rows="2" placeholder="Write an answer..." style="width:100%; border:1.5px solid #e8ecf4; border-radius:10px; padding:10px 12px; font-size:13px; font-family:'DM Sans',sans-serif; resize:none; outline:none; transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--azure)'" onblur="this.style.borderColor='#e8ecf4'"></textarea>
+                            <button type="submit" style="margin-top:8px; background:none; border:none; cursor:pointer; font-size:13px; color:var(--azure); font-weight:600; padding:0; font-family:'Syne',sans-serif;">Post answer →</button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <div style="text-align:center; padding:48px 0; color:var(--text-light);">
+                    <div style="font-size:2.5rem; margin-bottom:10px;"><i data-lucide="message-circle" style="width:48px; height:48px; stroke-width:1.2; color:var(--text-light);"></i></div>
+                    <p style="font-size:15px;">No questions yet — be the first to ask!</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

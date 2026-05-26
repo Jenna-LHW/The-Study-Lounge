@@ -1,0 +1,311 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}The Study Lounge{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --oxford: #002D62;
+            --oxford-light: #003d85;
+            --azure: #007FFF;
+            --amber: #FFBF00;
+            --amber-light: #FFD040;
+            --sage: #B7D5A8;
+            --offwhite: #F5F5F5;
+            --white: #ffffff;
+            --gray-soft: #f0f2f7;
+            --text-dark: #0d1b2a;
+            --text-mid: #4a5568;
+            --text-light: #8a96a8;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--offwhite);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Syne', sans-serif;
+        }
+
+        code, pre, .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: var(--white);
+            border-bottom: 2px solid var(--offwhite);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 16px rgba(0,45,98,0.06);
+        }
+
+        .nav-logo-text .bold {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            color: var(--oxford);
+        }
+        .nav-logo-text .light {
+            font-family: 'Syne', sans-serif;
+            font-weight: 400;
+            color: var(--text-mid);
+        }
+
+        .nav-link {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-mid);
+            text-decoration: none;
+            padding: 6px 4px;
+            transition: color 0.2s;
+            position: relative;
+        }
+        .nav-link:hover { color: var(--oxford); }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0; right: 0;
+            height: 2px;
+            background: var(--amber);
+            transform: scaleX(0);
+            transition: transform 0.2s;
+        }
+        .nav-link:hover::after { transform: scaleX(1); }
+
+        .btn-primary {
+            background: var(--oxford);
+            color: white;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            padding: 10px 22px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.2s, transform 0.15s;
+            display: inline-block;
+        }
+        .btn-primary:hover { background: var(--oxford-light); transform: translateY(-1px); }
+
+        .btn-amber {
+            background: var(--amber);
+            color: var(--oxford);
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            padding: 12px 28px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-size: 15px;
+            transition: background 0.2s, transform 0.15s;
+            display: inline-block;
+        }
+        .btn-amber:hover { background: var(--amber-light); transform: translateY(-1px); }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--oxford);
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            padding: 11px 28px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-size: 15px;
+            border: 2px solid var(--oxford);
+            transition: all 0.2s;
+            display: inline-block;
+        }
+        .btn-outline:hover { background: var(--oxford); color: white; transform: translateY(-1px); }
+
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            border: 1.5px solid #e8ecf4;
+            transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+            overflow: hidden;
+        }
+        .card:hover {
+            box-shadow: 0 8px 32px rgba(0,45,98,0.10);
+            transform: translateY(-3px);
+            border-color: var(--azure);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb a {
+            color: var(--azure);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .breadcrumb a:hover { text-decoration: underline; }
+        .breadcrumb span { color: var(--text-light); font-size: 14px; margin: 0 6px; }
+
+        /* Badge */
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            font-family: 'Syne', sans-serif;
+        }
+        .badge-oxford { background: rgba(0,45,98,0.08); color: var(--oxford); }
+        .badge-amber { background: rgba(255,191,0,0.15); color: #8a6500; }
+        .badge-green { background: rgba(183,213,168,0.3); color: #3a6b2a; }
+        .badge-azure { background: rgba(0,127,255,0.10); color: #0050cc; }
+
+        /* Prose styles for note content */
+        .prose { line-height: 1.85; color: var(--text-dark); }
+        .prose h1 { font-size: 2rem; font-weight: 800; margin: 2rem 0 1rem; color: var(--oxford); }
+        .prose h2 { font-size: 1.5rem; font-weight: 700; margin: 1.75rem 0 0.75rem; color: var(--oxford); border-bottom: 2px solid var(--offwhite); padding-bottom: 0.4rem; }
+        .prose h3 { font-size: 1.2rem; font-weight: 700; margin: 1.5rem 0 0.5rem; color: var(--text-dark); }
+        .prose p { margin: 0.85rem 0; }
+        .prose ul { list-style: disc; padding-left: 1.75rem; margin: 0.75rem 0; }
+        .prose ol { list-style: decimal; padding-left: 1.75rem; margin: 0.75rem 0; }
+        .prose li { margin: 0.4rem 0; }
+        .prose code { font-family: 'JetBrains Mono', monospace; background: #eef2ff; color: #003580; padding: 2px 7px; border-radius: 5px; font-size: 0.88em; }
+        .prose pre { background: #1a1f2e; border-radius: 12px; padding: 1.25rem; margin: 1.25rem 0; overflow-x: auto; }
+        .prose pre code { background: none; color: inherit; padding: 0; font-size: 0.9em; }
+        .prose blockquote { border-left: 4px solid var(--amber); padding: 0.5rem 1rem; margin: 1rem 0; background: rgba(255,191,0,0.06); border-radius: 0 8px 8px 0; color: var(--text-mid); font-style: italic; }
+        .prose table { width: 100%; border-collapse: collapse; margin: 1.25rem 0; border-radius: 10px; overflow: hidden; }
+        .prose th { background: var(--oxford); color: white; padding: 10px 14px; text-align: left; font-family: 'Syne', sans-serif; font-size: 13px; }
+        .prose td { padding: 10px 14px; border-bottom: 1px solid #e8ecf4; }
+        .prose tr:last-child td { border-bottom: none; }
+        .prose tr:nth-child(even) td { background: var(--offwhite); }
+        .prose img { border-radius: 12px; max-width: 100%; margin: 1.25rem 0; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+        .prose a { color: var(--azure); text-decoration: underline; }
+
+        /* Blur overlay */
+        .blurred-content {
+            filter: blur(5px);
+            user-select: none;
+            pointer-events: none;
+            max-height: 220px;
+            overflow: hidden;
+        }
+
+        /* Decorative code tag */
+        .code-tag {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--amber);
+            font-size: 13px;
+            font-weight: 500;
+            opacity: 0.7;
+        }
+
+        /* Messages */
+        .message-success { background: #edfaf1; border: 1.5px solid #a3d9b1; color: #1a6b35; border-radius: 10px; padding: 12px 16px; font-size: 14px; }
+        .message-error { background: #fff0f0; border: 1.5px solid #f5b8b8; color: #8b1a1a; border-radius: 10px; padding: 12px 16px; font-size: 14px; }
+
+        /* Footer */
+        .footer { background: var(--oxford); color: rgba(255,255,255,0.7); }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { animation: fadeUp 0.5s ease forwards; }
+        .fade-up-1 { animation-delay: 0.1s; opacity: 0; }
+        .fade-up-2 { animation-delay: 0.2s; opacity: 0; }
+        .fade-up-3 { animation-delay: 0.3s; opacity: 0; }
+        .fade-up-4 { animation-delay: 0.4s; opacity: 0; }
+
+        /* Floating code decorations */
+        .deco {
+            position: absolute;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            opacity: 0.12;
+            pointer-events: none;
+            user-select: none;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div style="max-width:1100px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; height:64px;">
+            <a href="/" style="display:flex; align-items:center; gap:10px; text-decoration:none;">
+                <img src="{% static 'images/logo.png' %}" alt="The Study Lounge logo" style="height:40px; width:auto;">
+                <span class="nav-logo-text" style="font-size:18px; line-height:1;">
+                    <span class="bold">The Study</span> <span class="light">Lounge</span>
+                </span>
+            </a>
+            <div style="display:flex; align-items:center; gap:28px;">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/community/questions/" class="nav-link">Community</a>
+                {% if user.is_authenticated %}
+                    <span style="font-size:14px; color:var(--text-light);">Hi, <strong style="color:var(--oxford);">{{ user.username }}</strong></span>
+                    <a href="/logout/" class="btn-outline" style="padding:8px 18px; font-size:13px;">Logout</a>
+                {% else %}
+                    <a href="/login/" class="nav-link">Login</a>
+                    <a href="/register/" class="btn-primary">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+        <div style="max-width:1100px; margin:16px auto 0; padding:0 24px;">
+            {% for message in messages %}
+                <div class="{% if message.tags == 'error' %}message-error{% else %}message-success{% endif %}" style="margin-bottom:8px;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Main -->
+    <main style="flex:1;">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div style="max-width:1100px; margin:0 auto; padding:40px 24px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:16px;">
+            <div>
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+                    <img src="{% static 'images/logo.png' %}" alt="logo" style="height:32px; filter:brightness(10);">
+                    <span style="font-family:'Syne',sans-serif; font-weight:700; font-size:16px; color:white;">The Study Lounge</span>
+                </div>
+                <p style="font-size:13px; margin:0;">LEARN • CONNECT • EXCEL</p>
+            </div>
+            <div style="display:flex; gap:24px; flex-wrap:wrap;">
+                <a href="/" style="color:rgba(255,255,255,0.6); font-size:14px; text-decoration:none; hover:color:white;">Home</a>
+                <a href="/community/questions/" style="color:rgba(255,255,255,0.6); font-size:14px; text-decoration:none;">Community Q&A</a>
+                <a href="/register/" style="color:rgba(255,255,255,0.6); font-size:14px; text-decoration:none;">Sign Up</a>
+            </div>
+            <p style="font-size:12px; margin:0; width:100%; text-align:center; border-top:1px solid rgba(255,255,255,0.1); padding-top:20px; margin-top:8px;">
+                © 2025 The Study Lounge — Built for CS students in Mauritius 🇲🇺
+            </p>
+        </div>
+    </footer>
+
+    <script>hljs.highlightAll();</script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+<script>
+  document.addEventListener('DOMContentLoaded', () => lucide.createIcons());
+</script>

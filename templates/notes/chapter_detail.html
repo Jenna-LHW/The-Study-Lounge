@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ chapter.name }} — The Study Lounge{% endblock %}
+
+{% block content %}
+<div style="max-width:1100px; margin:0 auto; padding:48px 24px;">
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb" style="margin-bottom:8px;">
+        <a href="/">Home</a>
+        <span>›</span>
+        <a href="{% url 'notes:level_detail' chapter.level.slug %}">{{ chapter.level }}</a>
+        <span>›</span>
+        <span style="color:var(--text-dark);">{{ chapter.name }}</span>
+    </div>
+
+    <!-- Header -->
+    <div style="margin-bottom:48px;">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+            <div style="background:var(--oxford); color:var(--amber); font-family:'JetBrains Mono',monospace; font-weight:700; font-size:13px; padding:6px 12px; border-radius:10px;">
+                {% if chapter.level.name == 'BSC' %}Module {{ chapter.order }}{% else %}Chapter {{ chapter.order }}{% endif %}
+            </div>
+            <span class="badge badge-azure">{{ notes.count }} notes</span>
+        </div>
+        <h1 style="font-size:2rem; font-weight:800; color:var(--oxford); margin:0 0 10px;">{{ chapter.name }}</h1>
+        {% if chapter.description %}
+            <p style="color:var(--text-mid); font-size:16px; margin:0; max-width:580px;">{{ chapter.description }}</p>
+        {% endif %}
+    </div>
+
+    <!-- Notes list -->
+    <div style="display:flex; flex-direction:column; gap:16px;">
+        {% for note in notes %}
+            <a href="{% url 'notes:note_detail' note.slug %}" class="card" style="padding:24px 28px; text-decoration:none; display:flex; align-items:center; justify-content:space-between; gap:20px;">
+                <div style="flex:1;">
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                        <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--azure); font-weight:500;">#{{ forloop.counter }}</span>
+                    </div>
+                    <h3 style="font-size:1.1rem; font-weight:700; color:var(--oxford); margin:0 0 6px;">{{ note.title }}</h3>
+                    {% if note.summary %}
+                        <p style="font-size:14px; color:var(--text-mid); margin:0 0 10px; line-height:1.6;">{{ note.summary }}</p>
+                    {% endif %}
+                    <span style="font-size:12px; color:var(--text-light);">Updated {{ note.updated_at|date:"d M Y" }}</span>
+                </div>
+                <div style="flex-shrink:0; width:40px; height:40px; background:var(--offwhite); border-radius:12px; display:flex; align-items:center; justify-content:center; color:var(--azure); font-size:20px; font-weight:700; transition:background 0.2s;">
+                    →
+                </div>
+            </a>
+        {% empty %}
+            <div style="text-align:center; padding:60px 0; color:var(--text-light);">
+                <div style="display:flex; justify-content:center; margin-bottom:12px;">
+                    <i data-lucide="file-text" style="width:48px; height:48px; stroke-width:1.2; color:var(--text-light);"></i>
+                </div>
+                <p style="font-size:16px;">No notes in this chapter yet — check back soon!</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
