@@ -32,13 +32,12 @@ def note_detail(request, slug):
     note = get_object_or_404(Note, slug=slug, is_published=True)
     questions = note.questions.all()
 
-    # Convert markdown to HTML
-    content_html = mark_safe(md.markdown(
-        note.content,
-        extensions=['extra', 'codehilite', 'toc']
-    ))
+    # Convert markdown to HTML with TOC
+    md_instance = md.Markdown(extensions=['extra', 'codehilite', 'toc'])
+    content_html = mark_safe(md_instance.convert(note.content))
+    toc_html = mark_safe(md_instance.toc)
 
-    # Get previous and next notes in the same chapter
+    # Get previous and next notes
     chapter_notes = list(note.chapter.notes.filter(is_published=True).order_by('order', 'created_at'))
     current_index = next((i for i, n in enumerate(chapter_notes) if n.pk == note.pk), None)
     prev_note = chapter_notes[current_index - 1] if current_index and current_index > 0 else None
@@ -47,6 +46,7 @@ def note_detail(request, slug):
     context = {
         'note': note,
         'content_html': content_html,
+        'toc_html': toc_html,
         'questions': questions,
         'prev_note': prev_note,
         'next_note': next_note,
