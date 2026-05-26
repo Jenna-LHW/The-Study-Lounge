@@ -38,27 +38,32 @@ def note_detail(request, slug):
         extensions=['extra', 'codehilite', 'toc']
     ))
 
+    # Get previous and next notes in the same chapter
+    chapter_notes = list(note.chapter.notes.filter(is_published=True).order_by('order', 'created_at'))
+    current_index = next((i for i, n in enumerate(chapter_notes) if n.pk == note.pk), None)
+    prev_note = chapter_notes[current_index - 1] if current_index and current_index > 0 else None
+    next_note = chapter_notes[current_index + 1] if current_index is not None and current_index < len(chapter_notes) - 1 else None
+
+    context = {
+        'note': note,
+        'content_html': content_html,
+        'questions': questions,
+        'prev_note': prev_note,
+        'next_note': next_note,
+        'is_blocked': False
+    }
+
     if request.user.is_authenticated:
-        return render(request, 'notes/note_detail.html', {
-            'note': note,
-            'content_html': content_html,
-            'questions': questions,
-            'is_blocked': False
-        })
+        return render(request, 'notes/note_detail.html', context)
 
     viewed_note = request.session.get('free_note_slug')
 
     if viewed_note is None:
         request.session['free_note_slug'] = slug
-        is_blocked = False
+        context['is_blocked'] = False
     elif viewed_note == slug:
-        is_blocked = False
+        context['is_blocked'] = False
     else:
-        is_blocked = True
+        context['is_blocked'] = True
 
-    return render(request, 'notes/note_detail.html', {
-        'note': note,
-        'content_html': content_html,
-        'questions': questions,
-        'is_blocked': is_blocked
-    })
+    return render(request, 'notes/note_detail.html', context)

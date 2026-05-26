@@ -56,6 +56,37 @@
             {{ content_html }}
         </div>
 
+        <!-- Previous / Next navigation -->
+        <div style="display:flex; justify-content:space-between; gap:16px; margin:32px 0; flex-wrap:wrap;">
+            {% if prev_note %}
+                <a href="{% url 'notes:note_detail' prev_note.slug %}" 
+                style="flex:1; min-width:200px; background:var(--white); border:1.5px solid #e8ecf4; border-radius:16px; padding:18px 22px; text-decoration:none; display:flex; align-items:center; gap:12px; transition:all 0.2s;"
+                onmouseover="this.style.borderColor='var(--azure)'" onmouseout="this.style.borderColor='#e8ecf4'">
+                    <div style="width:36px; height:36px; background:var(--offwhite); border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px; color:var(--oxford);">←</div>
+                    <div>
+                        <div style="font-size:11px; color:var(--text-light); font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:3px;">Previous note</div>
+                        <div style="font-size:14px; font-weight:700; color:var(--oxford); font-family:'Syne',sans-serif;">{{ prev_note.title }}</div>
+                    </div>
+                </a>
+            {% else %}
+                <div style="flex:1;"></div>
+            {% endif %}
+
+            {% if next_note %}
+                <a href="{% url 'notes:note_detail' next_note.slug %}"
+                style="flex:1; min-width:200px; background:var(--white); border:1.5px solid #e8ecf4; border-radius:16px; padding:18px 22px; text-decoration:none; display:flex; align-items:center; justify-content:flex-end; gap:12px; transition:all 0.2s; text-align:right;"
+                onmouseover="this.style.borderColor='var(--azure)'" onmouseout="this.style.borderColor='#e8ecf4'">
+                    <div>
+                        <div style="font-size:11px; color:var(--text-light); font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:3px;">Next note</div>
+                        <div style="font-size:14px; font-weight:700; color:var(--oxford); font-family:'Syne',sans-serif;">{{ next_note.title }}</div>
+                    </div>
+                    <div style="width:36px; height:36px; background:var(--oxford); border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px; color:white;">→</div>
+                </a>
+            {% else %}
+                <div style="flex:1;"></div>
+            {% endif %}
+        </div>
+
         <!-- Q&A Section -->
         <div>
             <div style="display:flex; align-items:center; gap:12px; margin-bottom:28px;">
