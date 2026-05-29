@@ -260,6 +260,11 @@
                 {% else %}
                     <a href="/login/" class="nav-link">Login</a>
                     <a href="/register/" class="btn-primary">Sign Up</a>
+                    <button onclick="openAboutModal()"
+                        style="background:none; border:1.5px solid #e8ecf4; border-radius:100px; width:32px; height:32px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text-mid); font-family:'Syne',sans-serif; font-weight:700; font-size:14px; transition:all 0.2s;"
+                        onmouseover="this.style.borderColor='var(--oxford)'; this.style.color='var(--oxford)'"
+                        onmouseout="this.style.borderColor='#e8ecf4'; this.style.color='var(--text-mid)'"
+                        title="About The Study Lounge">i</button>
                 {% endif %}
             </div>
         </div>
@@ -297,7 +302,7 @@
                 <a href="/register/" style="color:rgba(255,255,255,0.6); font-size:14px; text-decoration:none;">Sign Up</a>
             </div>
             <p style="font-size:12px; margin:0; width:100%; text-align:center; border-top:1px solid rgba(255,255,255,0.1); padding-top:20px; margin-top:8px;">
-                © 2025 The Study Lounge — Built for CS students in Mauritius 🇲🇺
+                © 2026 The Study Lounge — Built for CS students
             </p>
         </div>
     </footer>
@@ -308,4 +313,144 @@
 </html>
 <script>
   document.addEventListener('DOMContentLoaded', () => lucide.createIcons());
+</script>
+
+<!-- About Modal -->
+<div id="aboutModal" onclick="if(event.target===this)closeAboutModal()"
+    style="display:none; position:fixed; inset:0; background:rgba(0,45,98,0.5); z-index:1000; align-items:center; justify-content:center; padding:24px; backdrop-filter:blur(4px);">
+    <div style="background:var(--white); border-radius:24px; max-width:580px; width:100%; max-height:85vh; overflow-y:auto; box-shadow:0 24px 64px rgba(0,45,98,0.2);">
+
+        <!-- Modal header -->
+        <div style="background:var(--oxford); border-radius:24px 24px 0 0; padding:28px 32px; position:relative;">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <img src="{% static 'images/logo.png' %}" alt="logo" style="height:36px; filter:brightness(10);">
+                <div>
+                    <h2 style="font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:800; color:white; margin:0;">The Study Lounge</h2>
+                    <p style="font-size:12px; color:rgba(255,255,255,0.6); margin:0;">LEARN • CONNECT • EXCEL</p>
+                </div>
+            </div>
+            <button onclick="closeAboutModal()"
+                style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.15); border:none; border-radius:50%; width:32px; height:32px; cursor:pointer; color:white; font-size:18px; display:flex; align-items:center; justify-content:center; transition:background 0.2s;"
+                onmouseover="this.style.background='rgba(255,255,255,0.25)'"
+                onmouseout="this.style.background='rgba(255,255,255,0.15)'">×</button>
+        </div>
+
+        <!-- Modal body -->
+        <div style="padding:32px;">
+
+            <!-- About & Disclaimer -->
+            <div style="margin-bottom:28px;">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+                    <div style="width:28px; height:28px; background:rgba(0,45,98,0.08); border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                        <i data-lucide="hand" style="width:16px; height:16px; stroke-width:1.5; color:var(--oxford);"></i>
+                    </div>
+                    <h3 style="font-family:'Syne',sans-serif; font-size:15px; font-weight:700; color:var(--oxford); margin:0;">About & Disclaimer</h3>
+                </div>
+                <p style="font-size:14px; color:var(--text-mid); line-height:1.75; margin:0;">
+                    Hi! I'm <strong style="color:var(--oxford);">Jenna</strong>, a Computer Science student. I built this platform because when I was studying for my SC and HSC exams, I struggled to find clear, well-structured CS notes online. Most resources were either too technical, too scattered, or simply not tailored to our local curriculum.
+                </p>
+                <p style="font-size:14px; color:var(--text-mid); line-height:1.75; margin:12px 0 0;">
+                    The Study Lounge is my way of giving back. Everything here is written by me — a student, not a teacher or tutor. I'm simply sharing my understanding of the topics I've studied.
+                </p>
+                <div style="background:rgba(255,191,0,0.08); border-left:3px solid var(--amber); border-radius:0 8px 8px 0; padding:12px 14px; margin-top:12px;">
+                    <p style="font-size:13px; color:var(--text-mid); line-height:1.65; margin:0;">
+                        <i data-lucide="triangle-alert" style="width:14px; height:14px; stroke-width:1.5; color:var(--amber); vertical-align:middle; margin-right:4px;"></i>
+                        <strong>Please note:</strong> The notes on this platform are not official study material. They are written from my personal understanding and may contain errors or simplifications. Always cross-reference with your official textbooks and syllabus. I am not responsible for any inaccuracies.
+                    </p>
+                </div>
+            </div>
+
+            <div style="height:1.5px; background:var(--offwhite); margin-bottom:28px;"></div>
+
+            <!-- Sources -->
+            <div style="margin-bottom:28px;">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+                    <div style="width:28px; height:28px; background:rgba(0,45,98,0.08); border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                        <i data-lucide="book-open" style="width:16px; height:16px; stroke-width:1.5; color:var(--oxford);"></i>
+                    </div>
+                    <h3 style="font-family:'Syne',sans-serif; font-size:15px; font-weight:700; color:var(--oxford); margin:0;">Sources & References</h3>
+                </div>
+                <p style="font-size:14px; color:var(--text-mid); line-height:1.75; margin:0 0 10px;">The notes on this platform are inspired by and cross-referenced with the following resources:</p>
+                <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px;">
+                    <li style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-mid);"><span style="color:var(--azure); font-weight:700;">→</span> Official Cambridge CS syllabuses</li>
+                    <li style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-mid);"><span style="color:var(--azure); font-weight:700;">→</span> University lecture notes and slides</li>
+                </ul>
+                <p style="font-size:12px; color:var(--text-light); margin:10px 0 0; font-style:italic;">More sources are listed at the bottom of individual notes where applicable.</p>
+            </div>
+
+            <div style="height:1.5px; background:var(--offwhite); margin-bottom:28px;"></div>
+
+            <!-- How it works -->
+            <div style="margin-bottom:28px;">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+                    <div style="width:28px; height:28px; background:rgba(0,45,98,0.08); border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                        <i data-lucide="help-circle" style="width:16px; height:16px; stroke-width:1.5; color:var(--oxford);"></i>
+                    </div>
+                    <h3 style="font-family:'Syne',sans-serif; font-size:15px; font-weight:700; color:var(--oxford); margin:0;">How It Works</h3>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <div style="display:flex; align-items:flex-start; gap:12px;">
+                        <div style="width:24px; height:24px; background:var(--oxford); border-radius:7px; display:flex; align-items:center; justify-content:center; color:var(--amber); font-family:'Syne',sans-serif; font-weight:800; font-size:12px; flex-shrink:0;">1</div>
+                        <p style="font-size:13px; color:var(--text-mid); margin:0; line-height:1.6;"><strong style="color:var(--oxford);">Browse freely</strong> — explore all levels, chapters and note titles without an account.</p>
+                    </div>
+                    <div style="display:flex; align-items:flex-start; gap:12px;">
+                        <div style="width:24px; height:24px; background:var(--oxford); border-radius:7px; display:flex; align-items:center; justify-content:center; color:var(--amber); font-family:'Syne',sans-serif; font-weight:800; font-size:12px; flex-shrink:0;">2</div>
+                        <p style="font-size:13px; color:var(--text-mid); margin:0; line-height:1.6;"><strong style="color:var(--oxford);">Read one note free</strong> — visitors can read one full note without signing up.</p>
+                    </div>
+                    <div style="display:flex; align-items:flex-start; gap:12px;">
+                        <div style="width:24px; height:24px; background:var(--oxford); border-radius:7px; display:flex; align-items:center; justify-content:center; color:var(--amber); font-family:'Syne',sans-serif; font-weight:800; font-size:12px; flex-shrink:0;">3</div>
+                        <p style="font-size:13px; color:var(--text-mid); margin:0; line-height:1.6;"><strong style="color:var(--oxford);">Sign up for free</strong> — create a free account to unlock all notes across all levels.</p>
+                    </div>
+                    <div style="display:flex; align-items:flex-start; gap:12px;">
+                        <div style="width:24px; height:24px; background:var(--oxford); border-radius:7px; display:flex; align-items:center; justify-content:center; color:var(--amber); font-family:'Syne',sans-serif; font-weight:800; font-size:12px; flex-shrink:0;">4</div>
+                        <p style="font-size:13px; color:var(--text-mid); margin:0; line-height:1.6;"><strong style="color:var(--oxford);">Ask questions</strong> — stuck on something? Ask a question on any note and get help from the community.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="height:1.5px; background:var(--offwhite); margin-bottom:28px;"></div>
+
+            <!-- Contact -->
+            <div>
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+                    <div style="width:28px; height:28px; background:rgba(0,45,98,0.08); border-radius:8px; display:flex; align-items:center; justify-content:center;">
+                        <i data-lucide="mail" style="width:16px; height:16px; stroke-width:1.5; color:var(--oxford);"></i>
+                    </div>
+                    <h3 style="font-family:'Syne',sans-serif; font-size:15px; font-weight:700; color:var(--oxford); margin:0;">Contact</h3>
+                </div>
+                <p style="font-size:14px; color:var(--text-mid); line-height:1.75; margin:0 0 12px;">Found an error in a note? Have a suggestion? Want to say hi? Feel free to reach out!</p>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <a href="mailto:staceyjenna.lhw@gmail.com"
+                        style="display:flex; align-items:center; gap:6px; background:var(--offwhite); border:1.5px solid #e8ecf4; border-radius:100px; padding:8px 16px; font-size:13px; color:var(--oxford); text-decoration:none; font-weight:600; transition:all 0.2s;"
+                        onmouseover="this.style.borderColor='var(--oxford)'"
+                        onmouseout="this.style.borderColor='#e8ecf4'">
+                        <i data-lucide="mail" style="width:14px; height:14px; stroke-width:1.5;"></i> Email me
+                    </a>
+                    <a href="https://github.com/Jenna-LHW" target="_blank"
+                        style="display:flex; align-items:center; gap:6px; background:var(--offwhite); border:1.5px solid #e8ecf4; border-radius:100px; padding:8px 16px; font-size:13px; color:var(--oxford); text-decoration:none; font-weight:600; transition:all 0.2s;"
+                        onmouseover="this.style.borderColor='var(--oxford)'"
+                        onmouseout="this.style.borderColor='#e8ecf4'">
+                        <i data-lucide="github" style="width:14px; height:14px; stroke-width:1.5;"></i> GitHub
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function openAboutModal() {
+        const modal = document.getElementById('aboutModal');
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    function closeAboutModal() {
+        const modal = document.getElementById('aboutModal');
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeAboutModal();
+    });
 </script>
