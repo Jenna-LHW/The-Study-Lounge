@@ -260,12 +260,12 @@
                 {% else %}
                     <a href="/login/" class="nav-link">Login</a>
                     <a href="/register/" class="btn-primary">Sign Up</a>
-                    <button onclick="openAboutModal()"
+                {% endif %}
+                <button onclick="openAboutModal()"
                         style="background:none; border:1.5px solid #e8ecf4; border-radius:100px; width:32px; height:32px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text-mid); font-family:'Syne',sans-serif; font-weight:700; font-size:14px; transition:all 0.2s;"
                         onmouseover="this.style.borderColor='var(--oxford)'; this.style.color='var(--oxford)'"
                         onmouseout="this.style.borderColor='#e8ecf4'; this.style.color='var(--text-mid)'"
                         title="About The Study Lounge">i</button>
-                {% endif %}
             </div>
         </div>
     </nav>
