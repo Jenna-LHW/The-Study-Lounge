@@ -10,9 +10,7 @@ A computer science focused study platform built for SC, HSC and BSc Computer Sci
 
 ## Live Demo
 
- **[https://the-study-lounge.onrender.com](https://the-study-lounge.onrender.com)**
-
-> Note: The site is hosted on Render's free tier. If it hasn't been visited recently, the first load may take a few seconds to wake up.
+> ⚠️ **The hosted demo is no longer available.** This project was previously deployed on Render's free tier at `the-study-lounge.onrender.com`, but that deployment has since expired and the site is offline. To try it out, please follow the [Getting Started](#getting-started-local-development) instructions below to run it locally.
 
 ---
 
@@ -200,6 +198,8 @@ User
 ---
 
 ## Deployment (Render)
+
+> **Note:** The original deployment referenced in this README has expired. The instructions below are kept for reference if you'd like to redeploy the project on Render (or another host) yourself.
 
 The project is configured for one-click deployment on Render.
 
